@@ -16,8 +16,8 @@ Official Groupchat at Gitter: https://gitter.im/tolga9009/elgato-gchd
 
 ### Unsupported devices
 
-* Elgato Game Capture HD60 (work in progress)
-* Elgato Game Capture HD60 S
+* Elgato Game Capture HD60
+* Elgato Game Capture HD60 S (WIP)
 * Elgato Game Capture HD60 Pro
 
 
