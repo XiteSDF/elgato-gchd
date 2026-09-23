@@ -20,7 +20,10 @@
 #define GAME_CAPTURE_HD_2	0x0051
 #define GAME_CAPTURE_HD_3	0x005d // new revision GCHD (HDNew)
 #define GAME_CAPTURE_HD60	0x005c // Game Capture HD60 - unsupported
-#define GAME_CAPTURE_HD60_S	0x004f // TODO: recheck
+#define GAME_CAPTURE_HD60_S_0	0x004f // Game Capture HD60 S
+#define GAME_CAPTURE_HD60_S_1	0x005e // (rev 2)
+#define GAME_CAPTURE_HD60_S_2	0x0074 // (rev 3)
+#define GAME_CAPTURE_HD60_S_3	0x0076 // (rev 4) - potentially requires higher firmware
 
 // firmware
 const char * FW_MB86H57_H58_IDLE[] =
