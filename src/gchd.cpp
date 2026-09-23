@@ -20,7 +20,7 @@
 #define GAME_CAPTURE_HD_2	0x0051
 #define GAME_CAPTURE_HD_3	0x005d // new revision GCHD (HDNew)
 #define GAME_CAPTURE_HD60	0x005c // Game Capture HD60 - unsupported
-#define GAME_CAPTURE_HD60_S	0x004f // Game Capture HD60 S - unsupported
+#define GAME_CAPTURE_HD60_S	0x004f // TODO: recheck
 
 // firmware
 const char * FW_MB86H57_H58_IDLE[] =
@@ -36,6 +36,13 @@ const char * FW_MB86M01_ASSP_NSEC_IDLE[] =
 const char * FW_MB86M01_ASSP_NSEC_ENC[] =
 {"MB86M01_ASSP_NSEC_ENC_H",
  "mb86m01_assp_nsec_enc_h.bin" };
+
+// HD60 S from Mac version of GCHD
+const char * FW_HD60_S[] =
+{"ub530_v170317.bin" };
+
+const char * FW_HD60_S_V4[] =
+{"ub530_v200819.bin" };
 
 // constants
 #define INTERFACE_NUM		0x00
