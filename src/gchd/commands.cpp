@@ -412,6 +412,22 @@ void GCHD::transcoderTableWrite(uint16_t address, std::vector<uint8_t> &data)
 	}
 }
 
+// HD60 S helpers
+
+void GCHD::write60S(uint8_t bRequest, uint16_t wValue, uint16_t wIndex, const std::vector<unsigned char> &writeVector)
+{
+	write_config_buffer( bRequest, wValue, wIndex, (unsigned char *)writeVector.data(), writeVector.size() );
+}
+
+std::vector<unsigned char> GCHD::read60S(uint8_t bRequest, uint16_t wValue, uint16_t wIndex, uint8_t size)
+{
+	std::vector<unsigned char> input;
+	input.resize(size);
+	read_config_buffer( bRequest, wValue, wIndex, (unsigned char *)input.data(), size );
+	return input;
+}
+
+
 void GCHD::mailReadyWait()
 {
 	uint16_t status;

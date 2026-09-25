@@ -11,10 +11,47 @@
 #include "../gchd.hpp"
 
 
+void GCHD::configureDeviceHD60S() {
+	// This is the sequence I observed on my HD60 S, paste it as is for now
+	write60S( 0xec, 0x0000, 0, {0xb8, 0x22, 0x00, 0x00, 0x00, 0xc0, 0x00, 0x00, 0x50, 0xca} );
+	write60S( 0xc2, 0x0000, 0, {} );
+	write60S( 0xc7, 0x0064, 0, {} );
+	write60S( 0xc1, 0xc309, 0, {} );
+	write60S( 0xc1, 0x4134, 0, {} );
+	read60S( 0xc1, 0x0039, 0, 1 );
+	
+	uint32_t response;
+	do { 
+		write60S( 0xc0, 0x5066, 0, {0xab, 0x03, 0x12, 0x34, 0x57} );
+		std::vector<unsigned char> readBuffer = read60S(0xc0, 0x5066, 0, 3 );
+
+		response=Utility::debyteify<uint32_t>(readBuffer.data(), 3);
+	} while (response == 0x334455);
+
+	write60S( 0xc0, 0x5066, 0, {0xab, 0x03, 0x12, 0x34, 0x58} );
+	read60S(0xc0, 0x5066, 0, 3 ); // EXPECTED 110311
+
+	// wValue changes here
+	write60S( 0xc0, 0x509c, 0, {0x00, 0x00} );
+	write60S( 0xc0, 0x509c, 0, {0x07, 0xa5} );
+	write60S( 0xc0, 0x509c, 0, {0x00, 0x00} );
+
+	// back to 0x5066
+	write60S( 0xc0, 0x5066, 0, {0x9d, 0x01, 0x07} );
+	read60S( 0xc1, 0x5066, 0, 1 );
+
+	// CONT, need to check idle state and what not
+}
+
 //This runs the commands for all configurations up until a point they diverge
 //badly in a way we haven't been unable to untangle yet.
 void GCHD::configureDevice()
 {
+	if (deviceType_ == DeviceType::GameCaptureHD60S) {
+		// HD60 S is a different beast entirely.
+		GCHD::configureDeviceHD60S();
+		return;
+	}
 	std::vector<unsigned char> version;
 	readVersion( version );
 	std::cerr << "Hardware revision is " << version.data() << std::endl;

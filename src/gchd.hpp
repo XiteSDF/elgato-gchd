@@ -57,6 +57,7 @@ class GCHD {
 		void closeDevice(); //At USB level
 		int getInterface();
 		void setupConfiguration();
+		void configureDeviceHD60S(); //At Device level
 		void configureDevice(); //At Device level
 		void uninitDevice();    //At Device level
 		void configureHDMI();
@@ -178,6 +179,9 @@ class GCHD {
 
 		void slsi(uint16_t wIndex, uint16_t data);
 		void transcoderTableWrite(uint16_t address, std::vector<uint8_t> &data);
+
+		void write60S(uint8_t bRequest, uint16_t wValue, uint16_t wIndex, const std::vector<unsigned char> &writeVector);
+		std::vector<unsigned char> read60S(uint8_t bRequest, uint16_t wValue, uint16_t wIndex, uint8_t size);
 
 		void mailReadyWait();
 

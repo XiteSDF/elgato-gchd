@@ -23,7 +23,7 @@
 #define GAME_CAPTURE_HD60_S_0	0x004f // Game Capture HD60 S
 #define GAME_CAPTURE_HD60_S_1	0x005e // (rev 2)
 #define GAME_CAPTURE_HD60_S_2	0x0074 // (rev 3)
-#define GAME_CAPTURE_HD60_S_3	0x0076 // (rev 4) - potentially requires higher firmware
+#define GAME_CAPTURE_HD60_S_3	0x0076 // (rev 4)
 
 // firmware
 const char * FW_MB86H57_H58_IDLE[] =
@@ -39,13 +39,6 @@ const char * FW_MB86M01_ASSP_NSEC_IDLE[] =
 const char * FW_MB86M01_ASSP_NSEC_ENC[] =
 {"MB86M01_ASSP_NSEC_ENC_H",
  "mb86m01_assp_nsec_enc_h.bin" };
-
-// HD60 S from Mac version of GCHD
-const char * FW_HD60_S[] =
-{"ub530_v170317.bin" };
-
-const char * FW_HD60_S_V4[] =
-{"ub530_v200819.bin" };
 
 // constants
 #define INTERFACE_NUM		0x00
@@ -107,6 +100,10 @@ int GCHD::checkFirmware() {
 		idleNames = FW_MB86M01_ASSP_NSEC_IDLE;
 		encNames = FW_MB86M01_ASSP_NSEC_ENC;
 		nameCount = sizeof(FW_MB86M01_ASSP_NSEC_IDLE)/sizeof(const char *);
+	}
+	else if (deviceType_ == DeviceType::GameCaptureHD60S) {
+		// HD60 S doesn't seem to require firmware files
+		return 0;
 	}
 	else {
 		throw std::logic_error( "Unsupported device.");
@@ -184,7 +181,27 @@ int GCHD::openDevice() {
 		return 1;
 	}
 
-	devh_ = libusb_open_device_with_vid_pid(nullptr, VENDOR_ELGATO, GAME_CAPTURE_HD60_S);
+	devh_ = libusb_open_device_with_vid_pid(nullptr, VENDOR_ELGATO, GAME_CAPTURE_HD60_S_0);
+	if (devh_) {
+		deviceType_ = DeviceType::GameCaptureHD60S;
+		std::cerr << "The Elgato Game Capture HD60 S is currently not supported." << std::endl;
+		return 1;
+	}
+
+	devh_ = libusb_open_device_with_vid_pid(nullptr, VENDOR_ELGATO, GAME_CAPTURE_HD60_S_1);
+	if (devh_) {
+		deviceType_ = DeviceType::GameCaptureHD60S;
+		return 0;
+	}
+
+	devh_ = libusb_open_device_with_vid_pid(nullptr, VENDOR_ELGATO, GAME_CAPTURE_HD60_S_2);
+	if (devh_) {
+		deviceType_ = DeviceType::GameCaptureHD60S;
+		std::cerr << "The Elgato Game Capture HD60 S is currently not supported." << std::endl;
+		return 1;
+	}
+
+	devh_ = libusb_open_device_with_vid_pid(nullptr, VENDOR_ELGATO, GAME_CAPTURE_HD60_S_3);
 	if (devh_) {
 		deviceType_ = DeviceType::GameCaptureHD60S;
 		std::cerr << "The Elgato Game Capture HD60 S is currently not supported." << std::endl;
